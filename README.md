@@ -9,14 +9,14 @@ npm install
 
 To run
 ---------
-```
+```bash
 npm run serve
 ```
 
 To build
 ---------
 
-```
+```bash
 npm run build
 ```
 
