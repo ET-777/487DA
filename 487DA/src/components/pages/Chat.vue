@@ -127,7 +127,7 @@
         data() {
             return {
                 id: 0,
-                loaded3: false,
+                loaded3: true,
                 interval: null,
                 intervalMain: null,
                 myPhoto: true,

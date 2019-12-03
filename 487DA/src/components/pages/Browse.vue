@@ -166,7 +166,7 @@
         name: "browse",
         data() {
             return {
-                loaded:false,
+                loaded:true,
                 users: [],
                 user: {},
                 images: [],

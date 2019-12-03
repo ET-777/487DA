@@ -3,15 +3,7 @@
         <Header></Header>
 
         <div v-if="!loaded" class="container align-items-center justify-content-center base">
-            <br />
-            <img src="../../assets/eva.png"/>
-        </div>
-        <br />
-        <div class="text-center" id="secure">
-            <p style="font-weight: bold" class="text-center, text-b"> Name: Eva Flower</p>
-            <p style="font-weight: bold" class="text-center, text-b">City: Philadelphia</p>
-            <p style="font-weight: bold" class="text-center, text-b">Interested in: Females</p>
-            <p style="font-weight: bold" class="text-center, text-b">Age: 24</p>
+            <img src="../../assets/load3.gif"/>
         </div>
         <div v-if="loaded" class="container align-items-center justify-content-center fixed">
             <div class="row">
@@ -181,7 +173,7 @@
                 errorCountry: null,
                 errorSurname: null,
                 hobbyError: null,
-                loaded:false,
+                loaded:true,
                 editMode: false,
                 fileChosen: false,
                 changePhotoMode: false,

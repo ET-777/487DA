@@ -31,14 +31,17 @@ export default new Vuex.Store({
         login({commit}, authUser){
             return new Promise((resolve, reject) => {
                 commit('auth_request');
-                let data = 'username='+authUser.username+'&password='+authUser.password;
+                let data = {username: authUser.username,
+                password: authUser.password};
+                console.log(authUser.username)
                 let headers = {
                     'Content-type': 'application/x-www-form-urlencoded'
                 };
-                AXIOS.post('/login', data, {
+                AXIOS.post('/login',data, {
                     headers: headers
                 })
                     .then(response => {
+                        console.log(response.data.user);
                         const token = response.headers.authorization;
                         const user  = authUser;
                         localStorage.setItem('token', token);
@@ -57,7 +60,8 @@ export default new Vuex.Store({
         register({commit}, regUser){
             return new Promise((resolve, reject) => {
                 commit('auth_request');
-                AXIOS.post('/register', regUser)
+                console.log(regUser)
+                AXIOS.post('/Registration', JSON.stringify(regUser))
                     .then(response => {
                         resolve(response)
                     })

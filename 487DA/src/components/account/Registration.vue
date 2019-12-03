@@ -2,13 +2,13 @@
     <form class="needs-validation" novalidate>
         <div class="form-row">
             <div class="col-md-4 mb-3">
-                <label class="bold">First name</label>
-                <input type="text" class="form-control" placeholder="First name" v-model="userRegister.name" required>
+                <label class="bold">Hair color</label>
+                <input type="text" class="form-control" placeholder="Hair color" v-model="userRegister.name" required>
                 <p v-if="loaded" class="text-danger small-text">{{errors['name']}}</p>
             </div>
             <div class="col-md-4 mb-3">
-                <label class="bold">Last name</label>
-                <input type="text" class="form-control" placeholder="Last name" v-model="userRegister.surname" required>
+                <label class="bold">Eye color</label>
+                <input type="text" class="form-control" placeholder="eye color" v-model="userRegister.surname" required>
                 <p v-if="loaded" class="text-danger small-text">{{errors['surname']}}</p>
             </div>
             <div class="col-md-4 mb-3">
@@ -124,9 +124,11 @@
                         this.enter();
 
                     }).catch(error => {
+                        /*
                         this.loaded = true;
-                        this.error = error.response.data;
+                        //this.error = error.response.data;
                         this.errors = {};
+
                         for (let e in this.error) {
                             if(this.error[e].defaultMessage.includes('age')) {
                                 this.errors['birth'] = this.error[e].defaultMessage;
@@ -137,6 +139,7 @@
                             }
 
                         }
+                        */
                 });
             },
             enter: function() {
