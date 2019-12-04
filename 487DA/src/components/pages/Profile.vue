@@ -197,7 +197,10 @@
         mounted: function() {
             if (localStorage.getItem('token')) {
                 AXIOS.defaults.headers.common['Authorization'] = localStorage.getItem('token');
+                //this.user=localStorage.getItem('user')
+                
                 this.getUser();
+                console.log(this.user);
             }
             this.collectHobbies()
         },
@@ -234,7 +237,7 @@
                         dto['hobby'] = this.hobbies[el];
                         AXIOS.post('/hobby', dto)
                             .catch(error => {
-                                this.hobbyError = error.response.data[0].defaultMessage;
+                                this.hobpostbyError = error.response.data[0].defaultMessage;
                                 this.errorMode = true
                             })
 
@@ -273,28 +276,31 @@
                 }
             },
             getUser: function () {
-                AXIOS.get('/users')
-                    .then(response => {
-                        this.user = response.data;
+                        this.user=localStorage.getItem('user')
+                        //this.user = response.data;
                         this.setEditUser();
-                        this.firstImg = this.user.image[0].name;
+                        console.log(typeof this.user)
+                        console.log(this.user["city"])
+                        this.firstImg = this.user.image;
+                        /* I am lazy to support muli image 
                         this.otherImg = [];
                         for (let i=1; i<this.user.image.length; i++){
                             this.otherImg.push(this.user.image[i].name);
-                        }
+                        }*/
+
                         this.username = this.user.name;
                         this.hobbies = [];
                         for (let el in this.user.hobbies) {
                            this.hobbies.push(this.user.hobbies[el].name)
                         }
                         this.userHobbies = this.hobbies;
+                        /*
                         AXIOS.get('stats/matchPercentage/' + this.user.id )
                             .then(response => {
                                 this.matchingPercentage = response.data;
                                 this.setLoaded();
                                 this.editMode = false;
-                            });
-                    });
+                            });*/
             },
             setEditUser: function(){
                 this.hobbies = this.userHobbies;

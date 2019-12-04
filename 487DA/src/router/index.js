@@ -40,12 +40,12 @@ const router =  new Router({
 
 router.beforeEach((to, from, next) => {
     const publicPages = ['/'];
-    /*
+    
     const authRequired = !publicPages.includes(to.path);
     let token = localStorage.getItem('token');
     if (authRequired && token === null) {
         return next('/');
-    }*/
+    }
 
     next();
 });
