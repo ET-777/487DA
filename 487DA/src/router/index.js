@@ -5,7 +5,7 @@ import Profile from '@/components/pages/Profile'
 import Chat from '@/components/pages/Chat'
 import Stats from '@/components/pages/Stats'
 import Browse from '@/components/pages/Browse'
-import Secure from '@/components/pages/secure'
+
 
 Vue.use(Router);
 
@@ -34,21 +34,19 @@ const router =  new Router({
             path: '/browse',
             name: 'Browse',
             component: Browse
-        }, {
-            path: '/secure',
-            name: 'secure',
-            component: Secure
         }
     ]
 });
 
 router.beforeEach((to, from, next) => {
     const publicPages = ['/'];
-    //const authRequired = !publicPages.includes(to.path);
-    //let token = localStorage.getItem('token');
-    /*if (authRequired && token === null) {
+    
+    const authRequired = !publicPages.includes(to.path);
+    let token = localStorage.getItem('token');
+    if (authRequired && token === null) {
         return next('/');
-    }*/
+    }
+
     next();
 });
 

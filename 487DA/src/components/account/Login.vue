@@ -3,7 +3,7 @@
         <div class="form-group">
             <label>Email address</label>
             <input v-model="userLogIn.username" type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
-            <small class="form-text text-muted">We'll never share your email with anyone else.</small>
+            <small class="form-text text-muted">We'll not share your email with anyone else.</small>
         </div>
         <div class="form-group">
             <label>Password</label>
@@ -31,17 +31,14 @@
         methods: {
             enter: function() {
                 this.errorLogIn = false;
-                //this.$emit("authenticated", true);
-                //this.$router.replace('Profile');
-                this.$router.replace({ name: 'Profile', force: true });
-                //this.$router.push({ name: "secure" });
-                /*this.$store.dispatch('login', this.userLogIn)
+                this.$store.dispatch('login', this.userLogIn)
                     .then(() => {
                         this.$router.push('Profile');
                     })
+                    /*
                     .catch(error => {
                         this.errorLogIn = true;
-                    });*/
+                    })*/;
             },
         }
     }
@@ -52,7 +49,7 @@
         margin-bottom: 1ch
     }
     .btn {
-        background-color: #bd3c3d;
+        background-color: #bd1651;
         color: white; border-radius: 5px
     }
 
