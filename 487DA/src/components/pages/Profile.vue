@@ -19,7 +19,7 @@
                                 <!-- The slideshow -->
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <img class="profileImage" v-bind:src="'data:image/jpeg;base64,'+ firstImg" width="100">
+                                        <img class="profileImage" v-bind:src=" firstImg" width="100">
                                     </div>
                                     <div class="carousel-item" v-for="img in otherImg">
                                         <img class="profileImage" v-bind:src="'data:image/jpeg;base64,'+ img" width="100">
@@ -66,7 +66,7 @@
                                 <tr>
                                     <td class="capitalize">EMAIL:</td>
                                     <td>
-                                        <input type="text" maxlength="30" v-model="editUser.email"/>
+                                        <input type="text" maxlength="30" v-model="editUser.username"/>
                                         <span v-if="errorMode" class="text-danger small-text">{{this.errorEmail}}</span>
                                     </td>
                                 </tr>
@@ -131,7 +131,7 @@
                                 <span v-for="hobby in user.hobbies" :key="hobby.id" class="hobby">#{{hobby.name}}</span>
                             </div>
                             <div class="row rowFix1">
-                                <span class="bold">MEMBER SINCE: </span><span>{{user.registerDate}}</span>
+                                <span class="bold">Age: </span><span>{{user.registerDate}}</span>
                             </div>
                             <div class="row rowFix2" >
                                 <div class="col-sm">
@@ -276,12 +276,13 @@
                 }
             },
             getUser: function () {
-                        this.user=localStorage.getItem('user')
+                        this.user=JSON.parse(localStorage.getItem('user'));
                         //this.user = response.data;
                         this.setEditUser();
-                        console.log(typeof this.user)
-                        console.log(this.user["city"])
-                        this.firstImg = this.user.image;
+                        console.log(typeof this.user);
+                        console.log(this.user);
+                        console.log(this.user["city"]);
+                        this.firstImg = this.user['image'];
                         /* I am lazy to support muli image 
                         this.otherImg = [];
                         for (let i=1; i<this.user.image.length; i++){
