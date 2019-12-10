@@ -27,6 +27,7 @@ Vue.use(BootstrapVue);
 Vue.use(VueChatScroll)
 Vue.component('v-select', VSelect);
 
+
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
