@@ -41,16 +41,16 @@ export default new Vuex.Store({
                     headers: headers
                 })
                     .then(response => {
-                        console.log(response);
-                        //console.log(response.headers.authorization)
+                        //console.log(typeof response);
+                        //console.log(response);
                         //console.log(authUser)
                         const token = true;
-                        //const to
+                        
                         const user  = response.data.user;
-                        JSON.stringify(user)
+                        console.log(user);
                         localStorage.setItem('token', token);
                         localStorage.setItem('user',user);
-                        AXIOS.defaults.headers.common['Authorization'] = token;
+                        //AXIOS.defaults.headers.common['Authorization'] = token;
                         commit('auth_success', token, user);
                         resolve(response)
 

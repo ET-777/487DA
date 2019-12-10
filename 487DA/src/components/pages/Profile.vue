@@ -19,7 +19,7 @@
                                 <!-- The slideshow -->
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <img class="profileImage" v-bind:src="'data:image/jpeg;base64,'+ firstImg" width="100">
+                                        <img class="profileImage" v-bind:src=" firstImg" width="100">
                                     </div>
                                     <div class="carousel-item" v-for="img in otherImg">
                                         <img class="profileImage" v-bind:src="'data:image/jpeg;base64,'+ img" width="100">
@@ -66,7 +66,7 @@
                                 <tr>
                                     <td class="capitalize">EMAIL:</td>
                                     <td>
-                                        <input type="text" maxlength="30" v-model="editUser.email"/>
+                                        <input type="text" maxlength="30" v-model="editUser.username"/>
                                         <span v-if="errorMode" class="text-danger small-text">{{this.errorEmail}}</span>
                                     </td>
                                 </tr>
@@ -131,13 +131,11 @@
                                 <span v-for="hobby in user.hobbies" :key="hobby.id" class="hobby">#{{hobby.name}}</span>
                             </div>
                             <div class="row rowFix1">
-                                <span class="bold">MEMBER SINCE: </span><span>{{user.registerDate}}</span>
+                                <span class="bold">Age: </span><span>{{user.birth}}</span>
                             </div>
                             <div class="row rowFix2" >
-                                <div class="col-sm">
-                                    <label class="label">{{matchingPercentage}}%</label>
-                                    <font-awesome-icon icon="hand-holding-heart" class="fa-2x"/>
-                                </div>
+                                
+                                 
                             </div>
                         </div>
                         <div class="col-sm-1 rowFix2">
@@ -196,7 +194,7 @@
         },
         mounted: function() {
             if (localStorage.getItem('token')) {
-                AXIOS.defaults.headers.common['Authorization'] = localStorage.getItem('token');
+                //AXIOS.defaults.headers.common['Authorization'] = localStorage.getItem('token');
                 //this.user=localStorage.getItem('user')
                 
                 this.getUser();
@@ -218,6 +216,11 @@
                 this.setEditUser();
             },
             saveHobbies: function() {
+                this.editUser.Hobby=this.hobbies;
+                console.log(this.hobbies);
+                console.log("TEST1")
+                console.log(this.editUser);
+                /*
                 let dto = {
                     'userId': this.user.id,
                     'hobby': ""
@@ -225,6 +228,7 @@
                 for(let el in this.userHobbies){
                     if (!this.hobbies.includes(this.userHobbies[el])) {
                         dto['hobby'] = this.userHobbies[el];
+                        
                         AXIOS.delete('/hobby', {'data': dto})
                             .catch(error => {
                                 this.hobbyError = error.response.data[0].defaultMessage;
@@ -235,6 +239,7 @@
                 for(let el in this.hobbies) {
                     if(!this.userHobbies.includes(this.hobbies[el])) {
                         dto['hobby'] = this.hobbies[el];
+                        
                         AXIOS.post('/hobby', dto)
                             .catch(error => {
                                 this.hobpostbyError = error.response.data[0].defaultMessage;
@@ -243,15 +248,20 @@
 
                     }
                 }
-
+            */
             },
             saveInfo: function () {
                 this.saveHobbies();
                 this.updateErrors();
                 this.checkCity();
                 if (this.editUser.city !== "Select city") {
-                    AXIOS.put('/users', this.editUser)
-                        .then(this.getUser)
+                    this.editUser.previousKey=this.user.username;
+                    let sendData=JSON.stringify(this.editUser);
+                    //localStorage.setItem('user',this.editUser);
+                    
+                    console.log(sendData);
+                    AXIOS.put('/users', sendData)
+                        .then(this.updateUser) 
                         .catch(error => {
                             this.error = error.response.data;
                             for (let e in this.error) {
@@ -276,12 +286,13 @@
                 }
             },
             getUser: function () {
-                        this.user=localStorage.getItem('user')
+                        this.user=JSON.parse(localStorage.getItem('user'));
                         //this.user = response.data;
                         this.setEditUser();
-                        console.log(typeof this.user)
-                        console.log(this.user["city"])
-                        this.firstImg = this.user.image;
+                        //console.log(typeof this.user);
+                        console.log(this.user);
+                        //console.log(this.user["city"]);
+                        this.firstImg = this.user['image'];
                         /* I am lazy to support muli image 
                         this.otherImg = [];
                         for (let i=1; i<this.user.image.length; i++){
@@ -290,8 +301,8 @@
 
                         this.username = this.user.name;
                         this.hobbies = [];
-                        for (let el in this.user.hobbies) {
-                           this.hobbies.push(this.user.hobbies[el].name)
+                        for (let el in this.user.hobby) {
+                           this.hobbies.push(this.user.hobby[el])
                         }
                         this.userHobbies = this.hobbies;
                         /*
@@ -301,6 +312,15 @@
                                 this.setLoaded();
                                 this.editMode = false;
                             });*/
+            },
+            updateUser: function(){
+                this.user.name=editUser.name;
+                this.user.surname=edituser.surname;
+                this.user.city=edituser.city;
+                this.user.country=edituser.country;
+                this.user.bio=edituser.bio;
+                this.user.hobbies=edituser.Hobby;
+                
             },
             setEditUser: function(){
                 this.hobbies = this.userHobbies;
