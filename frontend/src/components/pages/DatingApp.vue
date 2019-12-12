@@ -2,7 +2,7 @@
     <div class="bg">
         <div class="row">
             <div class="col-sm text-center" style="margin-top: 20px">
-                <span style="font-weight: bold">WELCOME TO H&B DATING APP  (Its not Tinder)</span>
+                <span style="font-weight: bold">WELCOME TO H&B DatingHub</span>
             </div>
         </div>
         <div class="container align-items-center justify-content-center text-center">

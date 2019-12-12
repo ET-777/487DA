@@ -17,7 +17,7 @@
                                 <!-- The slideshow -->
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <img class="profileImage" v-bind:src="'data:image/jpeg;base64,'+ firstImg" width="100">
+                                        <img class="profileImage" v-bind:src="firstImg" width="100">
                                     </div>
                                     <div class="carousel-item" v-for="img in otherImg">
                                         <img class="profileImage" v-bind:src="'data:image/jpeg;base64,'+ img" width="100">
@@ -31,12 +31,7 @@
                                     <span class="carousel-control-next-icon"></span>
                                 </a>
                             </div>
-                            <div class="row rowStyle1">
-                                <div class="col-sm colStyle2">
-                                    <label class="label1">{{matchingPercentage}}%</label>
-                                    <font-awesome-icon icon="hand-holding-heart" class="fa-2x"/>
-                                </div>
-                            </div>
+                            
                         </div>
                         <div class="col-sm text-left colStyle3">
                             <div class="row">
@@ -45,17 +40,17 @@
                                 <span class="bold"></span><span>{{user.city}}, {{user.country}}</span>
                             </div>
                             <div class="row margin2">
-                                <span class="span3">{{user.likes}}</span>
-                                <font-awesome-icon icon="heart" class="fa-2x fixed"/>
+                                <span v-for="hobby in user.hobbies" class="span2" :key="hobby.id">#{{hobby.name}}</span>
+                            </div>
+                            <div class="row rowFix1">
+                                <span class="bold">Age: </span><span>{{user.birth}}</span>
                             </div>
                             <div class="row margin2">
                                 <span  class="bold">BIO</span>
                                 <div class="w-100"></div>
                                 <span>{{user.bio}}</span>
                             </div>
-                            <div class="row margin2">
-                                <span v-for="hobby in user.hobbies" class="span2" :key="hobby.id">#{{hobby.name}}</span>
-                            </div>
+                            
                         </div>
                     </div>
                     <div class="row margin3">
@@ -180,8 +175,8 @@
                 noUsersLeft: false,
                 filter: {
                     id: null,
-                    city: "Tallinn",
-                    country: "Estonia",
+                    city: "Beijing",
+                    country: "China",
                     gender: "MALE",
                     hobby: ""
                 },
@@ -218,17 +213,17 @@
                 if (!Countries[country].includes(city)) this.filter.city = "";
             },
             getChoiceLike: function() {
-                this.choice.toUserId = this.user.id;
+                this.choice.toUserId = this.user.username;
                 this.choice.likeValue = 1;
                 this.sendChoice();
             },
             getChoiceDislike: function() {
-                this.choice.toUserId = this.user.id;
+                this.choice.toUserId = this.user.username;
                 this.choice.likeValue = 0;
                 this.sendChoice();
             },
             sendChoice: function () {
-                AXIOS.post('/browse/grade', this.choice);
+                AXIOS.post('/match/update', this.choice);
                 this.n++;
                 if (this.n === this.users.length){
                     this.noUsersLeft = true;
@@ -245,13 +240,14 @@
                 setTimeout(() => this.loaded= true, 500);
             },
                 getAllUsers: function () {
-                AXIOS.get('/browse/all/?id=' + this.filter.id
+                AXIOS.get('/match/all/?id=' + this.filter.id
                 + '&city=' + this.filter.city
                 + '&country=' + this.filter.country
                 + '&gender=' + this.filter.gender
                 + '&hobby=' + this.filter.hobby)
                     .then(response => {
                         this.users = response.data;
+                        console.log(response);
                         this.n = 0;
                         if(this.users.length === 0){
                             this.noUsersLeft = true;
@@ -261,29 +257,21 @@
                             this.noUsersLeft = false;
                             this.getUser();
                         }
-                    })
+                    }).catch(error => {
+                        console.log(error);
+                })
             },
             getUser: function () {
                 this.user = this.users[this.n];
                 this.images = this.user.image;
-                this.firstImg = this.user.image[0].name;
-                this.otherImg = [];
-                for (let i=1; i<this.user.image.length; i++){
-                    this.otherImg.push(this.user.image[i].name);
-                }
-                AXIOS.get('stats/matchPercentage/' + this.user.id )
-                    .then(response => {
-                        this.matchingPercentage = response.data;
-                        this.setLoaded();
-                    })
+                this.firstImg = this.user.image;
+                
             },
             getClientId: function() {
-                AXIOS.get('/browse/id')
-                    .then(response => {
-                        this.choice.fromUserId = response.data;
-                        this.filter.id = response.data;
+                        this.choice.fromUserId = localStorage.getItem('key');
+                        this.filter.id = localStorage.getItem('key');
                         this.getAllUsers();
-                    })
+                   
             },
             logOut: function() {
                 this.$store.dispatch('logout')
