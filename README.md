@@ -3,14 +3,12 @@ Dating Web Application
 
 # DatingApp
 
-TO install 
+To install (under the frontend folder) 
 ---------
-under the folder frontendcall 
-```bash
-npm install 
 ```
-
-Then 
+npm install
+```
+ 
 To run
 ---------
 ```bash
