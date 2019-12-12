@@ -1,13 +1,14 @@
 # 487DA
 Dating Web Application
 
-# DatingApp; frontend
+# DatingApp
 
 TO install 
-under the folder frontend
-call 
+---------
+under the folder frontendcall 
+```bash
 npm install 
-
+```
 
 Then 
 To run
