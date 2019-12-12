@@ -42,7 +42,7 @@ export default new Vuex.Store({
                 })
                     .then(response => {
                         //console.log(typeof response);
-                        //console.log(response);
+                        console.log(response);
                         //console.log(authUser)
                         const token = true;
                         
@@ -50,6 +50,7 @@ export default new Vuex.Store({
                         console.log(user);
                         localStorage.setItem('token', token);
                         localStorage.setItem('user',user);
+                        localStorage.setItem('key',authUser.username);
                         //AXIOS.defaults.headers.common['Authorization'] = token;
                         commit('auth_success', token, user);
                         resolve(response)

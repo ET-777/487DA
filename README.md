@@ -1,12 +1,14 @@
 # 487DA
 Dating Web Application
 
-# DatingApp; frontend
+# DatingApp
 
-TO install 
-
-npm install 
-
+To install (under the frontend folder) 
+---------
+```
+npm install
+```
+ 
 To run
 ---------
 ```bash
@@ -27,10 +29,16 @@ Built with
 - JavaScript charting for designers & developers chart.js
 - Bootstrap free open-source CSS framework
 
-Tools used for better development proccess
+Additional info
 ---------
 
-- Java integrated development environment IntelliJ
+- Moesif CORS Plugin on Chorme for resolve the CORS issue 
+
+- Warning: It required if you want to process.
+
+- public account: 123@456.com/123
+
+- 
   
 
 

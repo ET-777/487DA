@@ -52,28 +52,28 @@
                                 <tr>
                                     <td class="capitalize">NAME:</td>
                                     <td>
-                                        <input type="text" maxlength="20" v-model="editUser.name"/>
+                                        <input type="text" maxlength="20" v-model="user.name"/>
                                         <span v-if="errorMode" class="text-danger small-text">{{this.errorName}}</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="capitalize">SURNAME:</td>
                                     <td>
-                                        <input type="text" maxlength="20" v-model="editUser.surname"/>
+                                        <input type="text" maxlength="20" v-model="user.surname"/>
                                         <span v-if="errorMode" class="text-danger small-text">{{this.errorSurname}}</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="capitalize">EMAIL:</td>
                                     <td>
-                                        <input type="text" maxlength="30" v-model="editUser.username"/>
+                                        <input type="text" maxlength="30" v-model="user.username"/>
                                         <span v-if="errorMode" class="text-danger small-text">{{this.errorEmail}}</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="capitalize">COUNTRY:</td>
                                     <td>
-                                        <select v-model="editUser.country" class="selectOption" v-on:click="checkCity">
+                                        <select v-model="user.country" class="selectOption" v-on:click="checkCity">
                                             <option class="disabled" value="" disabled selected>Select country</option>
                                             <option class="selectOption" v-for="(value, key) in Countries" :key="key">{{ key }} </option>
                                         </select>
@@ -83,7 +83,7 @@
                                 <tr>
                                     <td class="capitalize">CITY:</td>
                                     <td>
-                                        <select v-model="editUser.city" class="selectOption" v-on:click="checkCity">
+                                        <select v-model="user.city" class="selectOption" v-on:click="checkCity">
                                             <option class="disabled" value="" disabled selected>Select city</option>
                                             <option class="selectOption" v-for="cities in getCities()" :key="cities">{{ cities }} </option>
                                         </select>
@@ -102,7 +102,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <textarea v-model="editUser.bio" id="bio"></textarea>
+                                        <textarea v-model="user.bio" id="bio"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
@@ -119,20 +119,19 @@
                                 <span class="bold"></span><span>{{user.city}}, {{user.country}}</span>
                             </div>
                             <div class="row rowFix1">
-                                <span class="span2">{{user.likes}}</span>
-                                <font-awesome-icon icon="heart" class="fa-2x iconStyle"/>
+                                <span class="bold">Age: </span><span>{{user.birth}}</span>
+                            </div>
+                            <div class="row rowFix1">
+                                <span class="bold">hobby</span>
+                                <span>{{user.Hobby}}</span>
                             </div>
                             <div class="row rowFix1">
                                 <span class="bold">BIO</span>
                                 <div class="w-100"></div>
                                 <span>{{user.bio}}</span>
                             </div>
-                            <div class="row rowFix1">
-                                <span v-for="hobby in user.hobbies" :key="hobby.id" class="hobby">#{{hobby.name}}</span>
-                            </div>
-                            <div class="row rowFix1">
-                                <span class="bold">Age: </span><span>{{user.birth}}</span>
-                            </div>
+                            
+                            
                             <div class="row rowFix2" >
                                 
                                  
@@ -179,7 +178,6 @@
                 photoError: null,
                 error: {},
                 user: {},
-                editUser: {},
                 firstImg: {},
                 otherImg: [],
                 username: "",
@@ -198,7 +196,7 @@
                 //this.user=localStorage.getItem('user')
                 
                 this.getUser();
-                console.log(this.user);
+                //console.log(this.user);
             }
             this.collectHobbies()
         },
@@ -216,10 +214,11 @@
                 this.setEditUser();
             },
             saveHobbies: function() {
-                this.editUser.Hobby=this.hobbies;
+                this.user.Hobby=this.hobbies;
                 console.log(this.hobbies);
-                console.log("TEST1")
-                console.log(this.editUser);
+                console.log("Test SaveHobby");
+                //console.log(this.user);
+                console.log("Test adding Edituser.hobby");
                 /*
                 let dto = {
                     'userId': this.user.id,
@@ -254,14 +253,15 @@
                 this.saveHobbies();
                 this.updateErrors();
                 this.checkCity();
-                if (this.editUser.city !== "Select city") {
-                    this.editUser.previousKey=this.user.username;
-                    let sendData=JSON.stringify(this.editUser);
-                    //localStorage.setItem('user',this.editUser);
-                    
+                if (this.user.city !== "Select city") {
+                    this.user.previousKey=this.user.username;
+                    let sendData=JSON.stringify(this.user);
+                    //localStorage.setItem('user',this.user);
+                    console.log("test on what data to send ");
                     console.log(sendData);
                     AXIOS.put('/users', sendData)
-                        .then(this.updateUser) 
+                        .then(this.setEditUser2).then(console.log(this.user))
+                            /*
                         .catch(error => {
                             this.error = error.response.data;
                             for (let e in this.error) {
@@ -278,19 +278,20 @@
                                     this.errorCity = this.error[e].defaultMessage;
                                 }
                                 else if (this.error[e].field === "country") {
-                                    this.errorCountry = this.error[e].defaultMessage;
-                                }
-                            }
+                                    this.errorCountry = this.error[e].defaultMessage;user
                             this.errorMode = true;
-                        });
+                        })*/;
                 }
             },
             getUser: function () {
+
                         this.user=JSON.parse(localStorage.getItem('user'));
+                        //localStorage.removeItem('user');
                         //this.user = response.data;
                         this.setEditUser();
                         //console.log(typeof this.user);
-                        console.log(this.user);
+                        //console.log("test on getUser to get the this.user.info")
+                        //console.log(this.user);
                         //console.log(this.user["city"]);
                         this.firstImg = this.user['image'];
                         /* I am lazy to support muli image 
@@ -305,6 +306,8 @@
                            this.hobbies.push(this.user.hobby[el])
                         }
                         this.userHobbies = this.hobbies;
+                        this.setLoaded();
+                        this.editMode = false;
                         /*
                         AXIOS.get('stats/matchPercentage/' + this.user.id )
                             .then(response => {
@@ -314,19 +317,50 @@
                             });*/
             },
             updateUser: function(){
-                this.user.name=editUser.name;
-                this.user.surname=edituser.surname;
-                this.user.city=edituser.city;
-                this.user.country=edituser.country;
-                this.user.bio=edituser.bio;
-                this.user.hobbies=edituser.Hobby;
+                console.log("test on Update User");
+                console.log(this.user);
+                console.log("test on this.user");
+                console.log(this.user);
+
+
+                this.user.name=this.user.name;
+                //this.user.surname=this.edituser.surname;
+                this.user.city=this.user.city;
+                this.user.country=this.user.country;
+                this.user.bio=this.user.bio;
+                this.user.hobbies=this.user.Hobby;
+                localStorage.setItem('user',this.user);
                 
             },
             setEditUser: function(){
+                //localStorage.removeItem('user');
                 this.hobbies = this.userHobbies;
                 for (let i in this.user) {
-                    this.editUser[i] = this.user[i]
+                    this.user[i] = this.user[i]
                 }
+            },
+            setEditUser2:function(){
+                localStorage.removeItem('user');
+                for (let i in this.user) {
+                    this.user[i] = this.user[i]
+                }
+                this.firstImg = this.user['image'];
+                        /* I am lazy to support muli image 
+                        this.otherImg = [];
+                        for (let i=1; i<this.user.image.length; i++){
+                            this.otherImg.push(this.user.image[i].name);
+                        }*/
+
+                this.username = this.user.name;
+                this.hobbies = [];
+                for (let el in this.user.hobby) {
+                    this.hobbies.push(this.user.hobby[el])
+                }
+                this.userHobbies = this.hobbies;
+                localStorage.setItem('user',this.user);
+                this.setLoaded();
+                this.editMode = false;
+                localStorage.setItem('user',user)
 
             },
             setLoaded: function() {
@@ -340,21 +374,45 @@
                 let country = this.user.country;
                 let city = this.user.city;
                 if (!Countries[country].includes(city) || city === "Select city" || country === "Select country") {
+                    console.log(this.user.city);
                     this.user.city = "Select city";
                 }
+                console.log("check city");
             },
             onFileChanged (event) {
+                console.log(event.target.files);
                 this.file = event.target.files[0];
                 this.fileChosen= true;
+                
+
             },
+            
             onUpload() {
-                this.errorMode = false;
-                let fd = new FormData();
 
-                fd.append('file', this.file);
+          
+                //console.log(typeof this.file);
+                //let imgData = JSON.stringify(this.file);
+                //console.log(imgData);
 
-                let config = {header : {'Content-Type' : 'multipart/form-data'}};
-                AXIOS.post('/users/images', fd, config)
+                //let send={}
+                //fd.append('file', this.file);
+                //send["image"]=fd;
+                //send['keyword']=this.user.username;
+                let config = {header : {'Content-Type' : ' undefined'},
+                transformRequest: function (data) {
+	                let formData = new FormData();
+	                //need to convert our json object to a string version of json otherwise
+	                // the browser will do a 'toString()' on the object which will result
+	                // in the value '[Object object]' on the server.
+	                formData.append("myJsoNData", JSON.stringify(data.myExtraData));
+	                formData.append("thumbnail", data.thumbnail)
+	                return formData;
+	            },
+                data: {myExtraData: this.user.username, thumbnail: this.file}
+                };
+
+                //console.log(imgData);
+                AXIOS.post('/users/image', config)
                     .then(this.getUser)
                     .catch(error => {
                         this.photoError = error.response.data[0].defaultMessage;

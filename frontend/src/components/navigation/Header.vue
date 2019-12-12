@@ -1,6 +1,6 @@
 <template>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #bd1651; color: white; ">
-        <a class="navbar-brand" href="#">DatingApp</a>
+        <a class="navbar-brand" href="#">DatingHub</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>

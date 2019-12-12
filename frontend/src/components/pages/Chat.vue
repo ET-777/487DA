@@ -9,34 +9,36 @@
                         <div class="row rowStyle1" v-if="match.seen"
                              v-on:click="() => {getAllMessages(match); sendSeen(match);}">
                             <div class="col-4 colStyle1"><img
-                                    v-bind:src="'data:image/jpeg;base64,' + match.image[0].name"
+                                    v-bind:src="match.image"
                                     class="favimg rounded-circle"></div>
                             <div class="col-8">
                                 <div class="row">{{match.name}} {{match.surname}}</div>
-                                <div class="row rowStyle2" v-if="match.lastMessage.messageSeen">
+                                
+                                <!-- <div class="row rowStyle2" v-if="match.lastMessage.messageSeen">
                                     <label>{{match.lastMessage.message}}</label>
                                 </div>
                                 <div class="row rowStyle2" v-else>
-                                    <label v-if="match.lastMessage.fromUserId !== user.id"
+                                    <label v-if="match.lastMessage.fromUserId !== user.username"
                                            style="font-weight: bold; color: #1D1C1D">{{match.lastMessage.message}}
                                     </label>
                                     <label v-else>{{match.lastMessage.message}}</label>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                         <div class="row rowStyle1" v-else
                              style="background-color: #FFFF99"
-                             v-on:click="() => {getAllMessages(match); sendSeen(match);}">
-                            <div class="col-4 colStyle1"><img v-bind:src="'data:image/jpeg;base64,'+ match.image[0].name"
+                             v-on:click="() => {getAllMessages(match);}">
+                            <div class="col-4 colStyle1"><img v-bind:src="match.image"
                                                               class="favimg rounded-circle"></div>
                             <div class="col-8">
                                 <div class="row">{{match.name}} {{match.surname}}</div>
+                                 <!--
                                 <div class="row rowStyle2" v-if="match.lastMessage.messageSeen">
                                     {{match.lastMessage.message}}
                                 </div>
                                 <div class="row rowStyle2" style="font-weight: bold;  color: black" v-else>
                                     {{match.lastMessage.message}}
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </a>
@@ -53,7 +55,7 @@
                              v-chat-scroll="{always: false, smooth: true}">
                             <div style="margin-top: 50px"></div>
                             <div v-for="m in messages">
-                                <div v-if="m.fromUserId === user.id" class="row">
+                                <div v-if="m.fromID === user.username" class="row">
                                     <div class="col-md-6 col-sm-6"></div>
                                     <div class="col-md-4 col-sm-4">
                                         <div class="colStyle3">
@@ -62,14 +64,14 @@
                                         <span class="span">{{m.dateSent}}</span>
                                     </div>
                                     <div v-if="m.myPhoto" class="col-md-2 col-sm-2">
-                                        <img v-bind:src=" 'data:image/jpeg;base64,'+ user.image[0].name"
+                                        <img v-bind:src=" user.image"
                                              class="chatimg rounded-circle">
                                     </div>
                                     <div class="col-md-2 col-sm-2" v-else></div>
                                 </div>
                                 <div v-else class="row">
                                     <div class="col-md-2 col-xs-2" v-if="m.friendPhoto">
-                                        <img v-bind:src="'data:image/jpeg;base64,'+ friend.image[0].name"
+                                        <img v-bind:src="friend.image"
                                              class="chatimg rounded-circle">
                                     </div>
                                     <div class="col-md-2 col-xs-2" v-else></div>
@@ -77,7 +79,7 @@
                                         <div class="colStyle2">
                                             <span>{{m.message}}</span>
                                         </div>
-                                        <span class="span">{{m.dateSent}}</span>
+                                        <span class="span">{{m.datesend}}</span>
                                     </div>
                                     <div class="col-md-6 col-xs-6"></div>
                                 </div>
@@ -126,7 +128,7 @@
         },
         data() {
             return {
-                id: 0,
+                id: "0",
                 loaded3: true,
                 interval: null,
                 intervalMain: null,
@@ -165,7 +167,7 @@
             },
             goBack: function () {
                 this.isMatches = true;
-                this.chatSelected = false;
+                this.chatSelected = false;fromUserId
                 this.isNoChat = false;
                 clearTimeout(this.interval);
                 if (!this.isMobile()){
@@ -173,27 +175,33 @@
                 }
             },
             getUser: function () {
-                AXIOS.get('/users')
-                    .then(response => {
-                        this.user = response.data;
-                        this.id = this.user.id;
-                        this.loaded3 = true;
-                    });
+            //localStorage.getItem('user')
+            this.user = localStorage.getItem('user');
+            console.log("called the getUser");
+            console.log(this.user);
+            this.id = this.user.username;
+            console.log("ID:"+this.id)
+            this.loaded3 = true;
+                hello
             },
             sendSeen: function (friend) {
-                AXIOS.get('/messages/' + friend.id).then(
+                AXIOS.get('/messagesss/' + friend.username).then(
                 );
                 if (this.isMobile()){
                     this.isMatches = false;
                 }
             },
             getMatches: function () {
-                AXIOS.get('/match/all')
+                let key=localStorage.getItem('key');
+                AXIOS.get('/match/find/?key=' + key)
                     .then(response => {
                         this.matches = response.data;
+                        console.log("check response")
+                        console.log(this.matches[0]);
+                        /*
                         this.intervalMain = setTimeout(function () {
                             this.getMatches()
-                        }.bind(this), 200)
+                        }.bind(this), 200)*/
                     });
             },
             logOut: function () {
@@ -206,19 +214,28 @@
                 if (this.friend !== friend) {
                     clearTimeout(this.interval);
                 }
+                this.user=localStorage.getItem('user');
                 this.friend = friend;
-                this.messageView.fromUserId = this.user.id;
-                this.messageView.toUserId = friend.id;
+                this.messageView.fromUserId = "123@456.com";
+                this.messageView.toUserId = friend.username;
                 this.chatSelected = true;
                 this.isNoChat = false;
                 this.friendPhoto = true;
                 this.myPhoto = true;
-                AXIOS.get('messages/all/' + friend.id)
+                let send=this.user.username+"/"+friend.username;
+                console.log(this.user);
+                console.log(this.user.username)
+
+                send=JSON.stringify(send)
+
+                AXIOS.get('message/?fromid=' + "123@456.com"
+                + '&toid=' + friend.username)
                     .then(response => {
+                        console.log(response.data);
                         this.messages = response.data;
                         for (let m in this.messages) {
-                            this.messages[m].dateSent = this.parseDate(this.messages[m].dateSent);
-                            if (friend.id === this.messages[m].fromUserId) {
+                            this.messages[m].datesend = this.parseDate(this.messages[m].datesend);
+                            if (friend.username === this.messages[m].fromID) {
                                 this.messages[m].friendPhoto = this.friendPhoto;
                                 this.friendPhoto = false;
                                 this.myPhoto = true;
@@ -228,7 +245,11 @@
                                 this.myPhoto = false;
                                 this.friendPhoto = true;
                             }
+                            console.log(this.messages[m]);
+                            console.log(friend.username);
+
                         }
+                        
                         this.interval = setTimeout(function () {
                             this.getAllMessages(friend)
                         }.bind(this), 200)
@@ -236,15 +257,16 @@
             },
             sendMessage: function () {
                 if (this.messageView.message !== '') {
-                    AXIOS.post('/messages', this.messageView)
+                    AXIOS.post('/message', this.messageView)
                         .then(response =>
                             this.messageView.message = '');
                 }
             },
             parseDate: function (date) {
                 date = date.toString();
-                date = date.split('');
-                date = date[5] + date[6] + '.' + date[8] + date[9] + ' ' + date[11] + date[12] + ':' + date[14] + date[15]
+                date = date.split(':');
+                console.log(date);
+                //date = date[5] + date[6] + '.' + date[8] + date[9] + ' ' + date[11] + date[12] + ':' + date[14] + date[15]
                 return date
             }
         }
@@ -288,7 +310,7 @@
     }
 
     .colStyle2 {
-        background: #b3ffd9;
+        background: #35815b;
         border-radius: 5px;
     }
 
